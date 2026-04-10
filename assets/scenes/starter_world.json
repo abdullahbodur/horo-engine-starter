@@ -1,0 +1,88 @@
+{
+  "assets": {
+    "placeholder_beacon": {
+      "displayName": "Placeholder Beacon",
+      "guid": "starter-placeholder-beacon",
+      "mesh": "assets/models/placeholder_beacon/placeholder_beacon.obj",
+      "renderScale": "1.0000,1.0000,1.0000"
+    }
+  },
+  "objects": [
+    {
+      "id": "floor",
+      "position": [0.0, -0.25, 0.0],
+      "scale": [3.5, 0.25, 3.5],
+      "type": "Panel",
+      "yaw": 0.0
+    },
+    {
+      "id": "back_wall",
+      "position": [0.0, 1.75, -3.75],
+      "scale": [3.5, 1.75, 0.25],
+      "type": "Panel",
+      "yaw": 0.0
+    },
+    {
+      "id": "left_wall",
+      "position": [-3.75, 1.75, 0.0],
+      "scale": [0.25, 1.75, 3.5],
+      "type": "Panel",
+      "yaw": 0.0
+    },
+    {
+      "id": "right_wall",
+      "position": [3.75, 1.75, 0.0],
+      "scale": [0.25, 1.75, 3.5],
+      "type": "Panel",
+      "yaw": 0.0
+    },
+    {
+      "id": "crate_prop",
+      "position": [-1.35, 0.5, 0.45],
+      "props": {
+        "mesh": "box"
+      },
+      "scale": [0.75, 0.75, 0.75],
+      "type": "Prop",
+      "yaw": 18.0
+    },
+    {
+      "asset": "placeholder_beacon",
+      "id": "beacon_prop",
+      "position": [1.25, 0.0, 0.25],
+      "scale": [1.0, 1.0, 1.0],
+      "type": "Prop",
+      "yaw": 0.0
+    },
+    {
+      "id": "main_light",
+      "position": [0.0, 2.75, 1.75],
+      "props": {
+        "color": "1.0000,0.9500,0.8500",
+        "intensity": "3.0000",
+        "lightType": "point",
+        "radius": "10.0000"
+      },
+      "scale": [0.3, 0.3, 0.3],
+      "type": "Light",
+      "yaw": 0.0
+    },
+    {
+      "id": "cam_000",
+      "pitch": -4.0,
+      "position": [0.0, 2.4, 6.0],
+      "props": {
+        "farClip": "150.0000",
+        "fov": "60.0000",
+        "nearClip": "0.1000"
+      },
+      "scale": [1.0, 1.0, 1.0],
+      "type": "camera",
+      "yaw": 180.0
+    }
+  ],
+  "sceneId": "starter_world",
+  "sceneName": "Starter World",
+  "settings": {},
+  "version": 1
+}

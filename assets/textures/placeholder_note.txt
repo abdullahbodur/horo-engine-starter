@@ -1,0 +1,2 @@
+This is a fake placeholder asset bundled with the starter repo.
+Replace the beacon mesh and this note with real art later.

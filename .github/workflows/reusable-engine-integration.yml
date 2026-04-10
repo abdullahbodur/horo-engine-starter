@@ -1,0 +1,100 @@
+name: Reusable Engine Integration
+
+on:
+  workflow_call:
+    inputs:
+      starter_repository:
+        required: false
+        type: string
+        default: abdullahbodur/horo-engine-starter
+      starter_ref:
+        required: false
+        type: string
+        default: main
+      engine_repository:
+        required: false
+        type: string
+        default: abdullahbodur/horo-engine
+      engine_ref:
+        required: true
+        type: string
+      engine_path:
+        required: false
+        type: string
+        default: engine
+
+jobs:
+  build:
+    name: Integration Build · ${{ matrix.label }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            label: Linux / GCC
+            configure: cmake --preset debug
+            build: cmake --build --preset debug --parallel
+          - os: windows-latest
+            label: Windows / MSVC
+            configure: cmake --preset debug-msvc
+            build: cmake --build build/debug-msvc --config Debug --parallel
+          - os: macos-latest
+            label: macOS / Clang
+            configure: cmake --preset debug
+            build: cmake --build --preset debug --parallel
+
+    steps:
+      - name: Checkout starter repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.starter_repository }}
+          ref: ${{ inputs.starter_ref }}
+          path: starter
+
+      - name: Checkout engine branch under starter/engine
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.engine_repository }}
+          ref: ${{ inputs.engine_ref }}
+          submodules: recursive
+          path: starter/${{ inputs.engine_path }}
+
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            ninja-build \
+            libwayland-dev wayland-protocols libxkbcommon-dev \
+            libx11-dev libxrandr-dev libxinerama-dev \
+            libxcursor-dev libxi-dev libxext-dev \
+            libgl1-mesa-dev libglu1-mesa-dev
+
+      - name: Install Ninja on macOS
+        if: runner.os == 'macOS'
+        run: brew install ninja
+
+      - name: Cache FetchContent dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/.cmake/fetchcontent
+          key: starter-integration-fetchcontent-${{ runner.os }}-${{ hashFiles('starter/**/CMakeLists.txt', 'starter/**/CMakePresets.json') }}
+          restore-keys: |
+            starter-integration-fetchcontent-${{ runner.os }}-
+
+      - name: Show selected engine ref
+        shell: pwsh
+        run: |
+          Write-Host "Starter repo: ${{ inputs.starter_repository }}@${{ inputs.starter_ref }}"
+          Write-Host "Engine repo:  ${{ inputs.engine_repository }}@${{ inputs.engine_ref }}"
+
+      - name: Configure
+        working-directory: starter
+        run: ${{ matrix.configure }}
+        env:
+          FETCHCONTENT_BASE_DIR: ${{ github.workspace }}/.cmake/fetchcontent
+
+      - name: Build
+        working-directory: starter
+        run: ${{ matrix.build }}
