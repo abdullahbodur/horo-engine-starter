@@ -1,4 +1,4 @@
-name: Reusable Engine Integration
+name: Engine Test
 
 on:
   workflow_call:

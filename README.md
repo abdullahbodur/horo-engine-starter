@@ -37,7 +37,7 @@ cmake --build build/debug-msvc --config Debug
 
 ## Reusable workflow mantığı
 
-Bu repo içindeki `reusable-engine-integration.yml` workflow'u, `horo-engine` tarafında açılan PR branch/sha bilgisini input olarak alır:
+Bu repo içindeki `engine-test.yml` workflow'u, `horo-engine` tarafında açılan PR branch/sha bilgisini input olarak alır:
 
 1. Bu starter repo'yu checkout eder
 2. `engine/` klasörüne çağıran branch/sha'yı checkout eder
@@ -48,7 +48,7 @@ Bu repo içindeki `reusable-engine-integration.yml` workflow'u, `horo-engine` ta
 ```yaml
 jobs:
   starter-integration:
-    uses: abdullahbodur/horo-engine-starter/.github/workflows/reusable-engine-integration.yml@main
+    uses: abdullahbodur/horo-engine-starter/.github/workflows/engine-test.yml@main
     with:
       engine_repository: ${{ github.repository }}
       engine_ref: ${{ github.event.pull_request.head.sha || github.sha }}
