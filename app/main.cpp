@@ -41,8 +41,8 @@
 #include "scene/systems/PhysicsSystem.h"
 #include "scene/systems/RenderSystem.h"
 
-using namespace Monolith;
-using namespace Monolith::Editor;
+using namespace Horo;
+using namespace Horo::Editor;
 namespace fs = std::filesystem;
 
 namespace {
@@ -113,7 +113,7 @@ class HoroStarterApp : public Application {
     RenderContext::Init();
     DebugDraw::Init();
     m_camera.aspect = GetWindow().GetAspect();
-    m_scene.AddSystem(std::make_unique<PhysicsSystem>(m_scene.physics));
+    m_scene.AddSystem(std::make_unique<PhysicsSystem>(m_scene.GetPhysics()));
     m_scene.AddRenderSystem(std::make_unique<RenderSystem>(m_camera, m_renderAlpha));
 
     InitMaterials();
@@ -187,13 +187,13 @@ class HoroStarterApp : public Application {
       doc.filePath = path.string();
       std::string error;
       if (!ApplySceneDocument(doc, &error)) {
-        LOG_ERROR("Failed to apply scene '%s': %s", path.string().c_str(), error.c_str());
+        LogError("Failed to apply scene '{}': {}", path.string(), error);
         return false;
       }
       *outDocument = std::move(doc);
       return true;
     } catch (const std::exception& e) {
-      LOG_WARN("Failed to load scene '%s': %s", path.string().c_str(), e.what());
+      LogWarn("Failed to load scene '{}': {}", path.string(), e.what());
       return false;
     }
   }
@@ -330,7 +330,7 @@ class HoroStarterApp : public Application {
         try {
           mesh = m_meshCache.Get(prop.meshTag);
         } catch (const std::exception& e) {
-          LOG_WARN("Failed to load mesh '%s': %s. Falling back to primitive box.", prop.meshTag.c_str(), e.what());
+          LogWarn("Failed to load mesh '{}': {}. Falling back to primitive box.", prop.meshTag, e.what());
           mesh = CreatePrimitiveMesh(RuntimeSceneProp{});
         }
       }
@@ -346,7 +346,7 @@ class HoroStarterApp : public Application {
       meshComponent.material = std::move(material);
       meshComponent.visible = true;
       meshComponent.meshTag = prop.meshTag;
-      sceneRef.registry.Add<MeshComponent>(entity, std::move(meshComponent));
+      sceneRef.GetRegistry().Add<MeshComponent>(entity, std::move(meshComponent));
     });
   }
 
@@ -370,7 +370,7 @@ int main(int argc, char** argv) {
     app.ParseArgs(argc, argv);
     app.Run();
   } catch (const std::exception& e) {
-    LOG_ERROR("Fatal: %s", e.what());
+    LogError("Fatal: {}", e.what());
     return 1;
   }
 

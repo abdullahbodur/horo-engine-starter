@@ -1,6 +1,6 @@
 add_executable(HoroStarterApp main.cpp)
 
-target_link_libraries(HoroStarterApp PRIVATE MonolithEngine)
+target_link_libraries(HoroStarterApp PRIVATE HoroEngine)
 
 add_custom_command(TARGET HoroStarterApp POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
