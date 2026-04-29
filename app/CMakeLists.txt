@@ -2,9 +2,9 @@ add_executable(HoroStarterApp main.cpp)
 
 target_link_libraries(HoroStarterApp PRIVATE HoroEngine)
 
-if(HORO_RENDERER STREQUAL "opengl")
+if(TARGET horo-renderer-opengl)
     target_link_libraries(HoroStarterApp PRIVATE horo-renderer-opengl)
-elseif(HORO_RENDERER STREQUAL "null")
+elseif(TARGET horo-renderer-null)
     target_link_libraries(HoroStarterApp PRIVATE horo-renderer-null)
 endif()
 
