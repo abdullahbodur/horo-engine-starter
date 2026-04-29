@@ -8,7 +8,7 @@ and start building their own game quickly.
 
 ## What this template provides
 
-- A small C++ app under `app/` linked against `MonolithEngine`
+- A small C++ app under `app/` linked against `HoroEngine`
 - A sample scene under `assets/scenes/`
 - A placeholder/fake asset under `assets/models/`
 - Cross-platform CMake presets (Linux/macOS + Windows)
@@ -57,19 +57,39 @@ cmake --preset debug-msvc
 cmake --build build/debug-msvc --config Debug
 ```
 
-### 3) Run
-
-Linux/macOS:
+Or simply:
 
 ```bash
-./build/debug/bin/HoroStarterApp
+make build            # Linux/macOS (debug)
+make build CONFIG=debug-msvc  # Windows MSVC
 ```
 
-Windows:
+### 3) Run
 
-```powershell
-.\build\debug-msvc\bin\Debug\HoroStarterApp.exe
+```bash
+make run-editor       # start in editor mode
+make run-play         # start in play mode
 ```
+
+The `Makefile` automatically detects whether the `engine/` submodule is present:
+
+| Situation | Behaviour |
+|-----------|-----------|
+| `engine/` submodule present | builds from source, then launches `./build/<config>/bin/HoroStarterApp` |
+| `engine/` submodule removed | delegates to the installed HoroEngine IDE binary via `HORO_ENGINE_BINARY` |
+
+**Using the installed IDE binary (no submodule):**
+
+```bash
+# Remove the engine submodule when you want IDE-only workflow:
+git rm engine
+# Then just run:
+make run-editor
+# Or point to a specific binary:
+HORO_ENGINE_BINARY=/path/to/HoroEngine make run-editor
+```
+
+The IDE binary will open this project directory directly.
 
 ## Using this as your own game template
 
